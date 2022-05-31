@@ -3,10 +3,10 @@
 
 #define LED 10 //ポート10にLEDが接続されている
 
-const char* ssid     = "aterm-97e767-g"; //各自の環境に設定
-const char* password = "3368eab740637"; //各自の環境に設定
+const char* ssid     = "PrototypingLab-G"; //各自の環境に設定
+const char* password = "kobo12345"; //各自の環境に設定
 
-const char* server_ip = "192.168.10.104"; //サーバのアドレス・各自の環境で設定
+const char* server_ip = "192.168.11.13"; //サーバのアドレス・各自の環境で設定
 const int port = 20000;
 
 WiFiClient client;

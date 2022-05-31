@@ -21,7 +21,7 @@ PImage duckhuntingbeginningscreen;
 PImage explosion;
 PImage roastduck;
 
-int state=2, stage = 1, numBullets = 5, lastClear = 0, lastReload = 0, stageFrame = 0, lives = 5, score, highscore, timeLeft;
+  int state=2, stage = 1, numBullets = 5, lastClear = 0, lastReload = 0, stageFrame = 0, lives = 5, score, highscore, timeLeft;
 boolean dead = false;
 boolean shoot = false;
 boolean goldDuckShot = false;
@@ -147,6 +147,9 @@ void draw() {
        }
     c = my_server.available(); //待っている次のクライアントを取得
   }
+  if (btnA==1){
+    shoot();
+  }
       
   if (state == 0) {
     timeLeft=(int)(20-(((frameCount-stageFrame)%1200)/60));
@@ -250,7 +253,7 @@ void draw() {
    // text("4) Space is available every 7 seconds and it clears all ducks except the golden duck, but doesn't give any points", width/2, height/2+200);
     //text("5) Shoot accurately for a bulleye!", width/2, height/2+210);
     //text("6) Hit the golden duck for a lot of points!", width/2, height/2+220);
-    if (mousePressed) {
+    if (btnA==1) {
       frameCount = 0;
       state = 0;
     }
@@ -300,7 +303,7 @@ void sendDataToAllClients(){
   println("サーバがすべてのクライアントにメッセージを送信：" + msg);//コンソールに表示
 }    
     
-void mousePressed() {
+void shoot() {
   if (frameCount - lastReload>=25) {
     if (numBullets > 0) {
       numBullets--;
