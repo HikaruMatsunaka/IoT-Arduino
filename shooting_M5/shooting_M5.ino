@@ -3,10 +3,10 @@
 
 #define LED 10 //ポート10にLEDが接続されている
 
-const char* ssid     = "PrototypingLab-G"; //各自の環境に設定
-const char* password = "kobo12345"; //各自の環境に設定
+const char* ssid     = "Buffalo-G-1500"; //各自の環境に設定
+const char* password = "mbhgfwbndta5m"; //各自の環境に設定
 
-const char* server_ip = "192.168.11.13"; //サーバのアドレス・各自の環境で設定
+const char* server_ip = "192.168.11.4"; //サーバのアドレス・各自の環境で設定
 const int port = 20000;
 
 WiFiClient client;
@@ -207,13 +207,19 @@ void setup() {
 
 void loop() {
   M5.update(); //これを呼び出さないとボタンの状態は更新されない
+  M5.Beep.update();  
 
   int btnA = M5.BtnA.wasPressed(); //A（ホーム）ボタンの状態を取得
   if (btnA == 1) { //ボタンの状態をチェック
     counter++; //カウンタの値を増やす
 
-    //ここに音を鳴らす手引きを書きたい
-    
+    //音を鳴らす
+    M5.Beep.tone(3000);
+    delay(100);
+    M5.Beep.tone(1000);
+    delay(100);
+    M5.Beep.end();
+
     
   }
   M5.Lcd.setCursor(0, 50); //表示位置を指定
