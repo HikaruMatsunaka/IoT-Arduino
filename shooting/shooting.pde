@@ -11,6 +11,7 @@ float pitch = 0;
 float roll = 0;
 float yaw = 0;
 int btnA = 0;
+int btnB = 0;
 
 PImage backgroundImg;
 PImage duck;
@@ -140,15 +141,19 @@ void draw() {
       // クライアントから受け取ったメッセージの処理を記述
       String[] data = splitTokens(msg,","); //データを分割
       //受け取ったデータを変数に代入
-      pitch = ((float(data[0])+90)/180)*700;
-      roll = -((float(data[1])-90)/180)*700;
-      yaw = ((float(data[2])+90)/180)*1200;
+      pitch = ((float(data[0])+90)/180)*1000;
+      roll = -((float(data[1])-90)/180)*1000;
+      yaw = ((float(data[2])+90)/180)*1500;
       btnA = int(data[3]);
+      btnB = int(data[4]);
        }
     c = my_server.available(); //待っている次のクライアントを取得
   }
   if (btnA==1){
     shoot();
+  }
+  if (btnB==1){
+    reload();
   }
       
   if (state == 0) {
@@ -284,7 +289,9 @@ void keyPressed() {
     ducks.clear();
     lastClear = frameCount;
   }
-  if (key=='r') {
+}
+void reload(){
+  if (btnB==1) {
     lastReload = frameCount;
     numBullets = 5;
   }

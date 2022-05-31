@@ -202,6 +202,7 @@ void setup() {
 
   counter = 0;
   
+  
 }
 
 void loop() {
@@ -210,6 +211,10 @@ void loop() {
   int btnA = M5.BtnA.wasPressed(); //A（ホーム）ボタンの状態を取得
   if (btnA == 1) { //ボタンの状態をチェック
     counter++; //カウンタの値を増やす
+
+    //ここに音を鳴らす手引きを書きたい
+    
+    
   }
   M5.Lcd.setCursor(0, 50); //表示位置を指定
   M5.Lcd.print(counter); //カウンタ変数の値を出力
