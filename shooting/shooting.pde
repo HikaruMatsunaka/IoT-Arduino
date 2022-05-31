@@ -21,7 +21,7 @@ PImage duckhuntingbeginningscreen;
 PImage explosion;
 PImage roastduck;
 
-  int state=2, stage = 1, numBullets = 5, lastClear = 0, lastReload = 0, stageFrame = 0, lives = 5, score, highscore, timeLeft;
+int state=2, stage = 1, numBullets = 5, lastClear = 0, lastReload = 0, stageFrame = 0, lives = 5, score, highscore, timeLeft;
 boolean dead = false;
 boolean shoot = false;
 boolean goldDuckShot = false;
