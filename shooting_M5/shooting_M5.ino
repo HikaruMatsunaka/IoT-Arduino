@@ -3,8 +3,8 @@
 
 #define LED 10 //ポート10にLEDが接続されている
 
-const char* ssid     = "Buffalo-G-1500"; //各自の環境に設定
-const char* password = "mbhgfwbndta5m"; //各自の環境に設定
+const char* ssid     = ""; //各自の環境に設定
+const char* password = ""; //各自の環境に設定
 
 const char* server_ip = "192.168.11.4"; //サーバのアドレス・各自の環境で設定
 const int port = 20000;
