@@ -3,10 +3,11 @@
 
 #define LED 10 //ポート10にLEDが接続されている
 
-const char* ssid     = ""; //各自の環境に設定
-const char* password = ""; //各自の環境に設定
+const char* ssid     = "PrototypingLab-G"; //各自の環境に設定
+const char* password = "kobo12345"; //各自の環境に設定
 
-const char* server_ip = "192.168.11.4"; //サーバのアドレス・各自の環境で設定
+//const char* server_ip = "192.168.11.12"; //サーバのアドレス・各自の環境で設定
+const char* server_ip = "192.168.11.12";
 const int port = 20000;
 
 WiFiClient client;
@@ -19,6 +20,7 @@ float pitch;
 float roll;
 float yaw;
 
+int precounter;
 int counter;
 
 const int sampleFrequency = 100;
@@ -197,36 +199,43 @@ void setup() {
   //画面に表示
   M5.Lcd.fillScreen(BLACK);
   M5.Lcd.setTextColor(GREEN , BLACK);
-  M5.Lcd.setRotation(3);
-  M5.Lcd.setTextSize(2);
+  M5.Lcd.setRotation(0);
+  M5.Lcd.setTextSize(8);
 
-  counter = 0;
-  
+  counter = 5;
   
 }
 
 void loop() {
   M5.update(); //これを呼び出さないとボタンの状態は更新されない
-  M5.Beep.update();  
 
   int btnA = M5.BtnA.wasPressed(); //A（ホーム）ボタンの状態を取得
-  if (btnA == 1) { //ボタンの状態をチェック
-    counter++; //カウンタの値を増やす
+  
+  int btnB = M5.BtnB.wasPressed();
 
-    //音を鳴らす
-    M5.Beep.tone(3000);
-    delay(100);
-    M5.Beep.tone(1000);
-    delay(100);
-    M5.Beep.end();
-
-    
+  if (counter>0){
+    if (btnA == 1){
+      counter=counter-1;
+      M5.Beep.tone(3000);
+      delay(100);
+      M5.Beep.tone(1000);
+      delay(100);
+      M5.Beep.end();
+    }
   }
-  M5.Lcd.setCursor(0, 50); //表示位置を指定
+
+  if (btnB == 1){
+    counter=5;
+  }
+
+  M5.Lcd.setTextSize(3);
+  M5.Lcd.setTextFont(7);
+  M5.Lcd.setTextDatum(0);
+  M5.Lcd.setCursor(20, 40); //表示位置を指定
   M5.Lcd.print(counter); //カウンタ変数の値を出力
 
   //送信するデータの構築
-  String str = String(pitch,2) + "," + String(roll,2) + "," + String(yaw,2) + ","+ String(counter,2); 
+  String str = String(pitch,2) + "," + String(roll,2) + "," + String(yaw,2) + ","+ String(btnA,2)+ ","+ String(btnB,2)+","+String(counter); 
   client.println(str);//サーバにデータを送信
 
 
@@ -235,7 +244,6 @@ void loop() {
   while(client.available()) {
         String recieved_data = client.readStringUntil('\n'); //サーバからのデータを受け取り
         recieved_data.trim();//先頭と末尾の改行とスペースを削除
-        M5.Lcd.println(recieved_data); //画面に表示
         if(recieved_data == "LED"){
           digitalWrite(LED, LOW); //LOWのとき店頭
         }
@@ -243,10 +251,7 @@ void loop() {
 
   delay(50);
   
-  // メイン処理は無し
-  M5.Lcd.setCursor(0, 110);
-  M5.Lcd.printf(" %5.2f, %5.2f, %5.2f   ", pitch, roll, yaw);
-
+  
   delay(1);
   
 }

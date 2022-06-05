@@ -10,6 +10,8 @@ Server my_server; //サーバオブジェクト用の大域変数
 float pitch = 0;
 float roll = 0;
 float yaw = 0;
+int d = 0;
+int d2 = 0;
 int btnA = 0;
 int btnB = 0;
 
@@ -22,7 +24,7 @@ PImage duckhuntingbeginningscreen;
 PImage explosion;
 PImage roastduck;
 
-  int state=2, stage = 1, numBullets = 5, lastClear = 0, lastReload = 0, stageFrame = 0, lives = 5, score, highscore, timeLeft;
+  int state=2, stage = 1, numBullets = 5, prenumBullets=5, lastClear = 0, lastReload = 0, stageFrame = 0, lives =8 , score, highscore, timeLeft;
 boolean dead = false;
 boolean shoot = false;
 boolean goldDuckShot = false;
@@ -132,6 +134,7 @@ ArrayList <PImage> bullets = new ArrayList<PImage>();
 void draw() {
   
   Client c = my_server.available();//通信してきたクライアントを取得
+  prenumBullets=numBullets;
   while(c != null){ //通信してきたすべてのクライアントを処理
     String msg = c.readStringUntil('\n'); //クライアントからのメッセージを読み込む
     if (msg != null){ //メッセージが存在していたら
@@ -141,15 +144,17 @@ void draw() {
       // クライアントから受け取ったメッセージの処理を記述
       String[] data = splitTokens(msg,","); //データを分割
       //受け取ったデータを変数に代入
-      pitch = ((float(data[0])+90)/180)*1000;
-      roll = -((float(data[1])-90)/180)*1000;
+      
+      pitch = ((float(data[0])+80)/180)*1500;
+      roll = -((float(data[1])-80)/180)*1000;
       yaw = ((float(data[2])+90)/180)*1500;
       btnA = int(data[3]);
       btnB = int(data[4]);
+      numBullets = int(data[5]);
        }
     c = my_server.available(); //待っている次のクライアントを取得
   }
-  if (btnA==1){
+  if (numBullets<prenumBullets){
     shoot();
   }
   if (btnB==1){
@@ -163,10 +168,12 @@ void draw() {
       textSize(40);
       text("You Lose", width/2, height/2);
       lives=0;
+      
       if (btnA==1) {
+        if (d == 0){
         ducks.clear();
         score = 0;
-        lives = 5;
+        lives = 8;
         numBullets = 5;
         stage = 1;
         stageFrame=0;
@@ -175,6 +182,11 @@ void draw() {
         frameCount = 0;
         goldDuckShot= false;
         ducks1.get(0).vx=stage*2;
+        d = 1;
+        }
+        else{
+          d = 0;
+        }
       }
     }
     else {
@@ -270,12 +282,12 @@ void draw() {
     textSize(50);
     text("Level " + (stage+1), width/2, height/2);
     text("Press A button to start.", width/2, height/2+50);
-    lives = 5;
+    lives = 8;
     if (btnA==1&&(frameCount-stageFrame)>=1200) {
       ducks.clear();
       stageFrame = 1;
       frameCount=1;
-      lives = 5;
+      lives = 8;
       numBullets = 5;
       stage++;
       goldDuckShot=false;
@@ -304,16 +316,19 @@ void deviceShake() {
     
 void sendDataToAllClients(){
   //送信するメッセージを作成
-  String msg = "LED" + "\n"; //データをカンマで区切り、最後に改行コードを付加
+  String msg = "LED" + "\n" ; //データをカンマで区切り、最後に改行コードを付加
   // *** クライアントにメッセージを送信 ***//
   my_server.write(msg);//接続しているすべてのクライアントにメッセージを送る
   println("サーバがすべてのクライアントにメッセージを送信：" + msg);//コンソールに表示
+  
 }    
     
 void shoot() {
+  image(explosion, pitch-52, roll-52);
   if (frameCount - lastReload>=25) {
     if (numBullets > 0) {
-      numBullets--;
+      if (d2 == 0){
+      //numBullets--;
       for (int i=0;i<ducks.size();i++) {
         if (dist(pitch, roll, ducks.get(i).xDuck, ducks.get(i).yDuck+50)<100&&dist(pitch, roll, ducks.get(i).xDuck, ducks.get(i).yDuck+50)>20&&lives>0) {
           score+=stage;
@@ -336,7 +351,14 @@ void shoot() {
           }
         }
       }
+      
+    
+      d2 = 0;
     }
+    else{
+      d2 = 0;
+    }
+  }
   }
   sendDataToAllClients();
 }
