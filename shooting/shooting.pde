@@ -1,4 +1,3 @@
-//ペアプログラミングで行いました。(1DS20117P三橋俊平1DS20102R松中光)
 // Smaaviltguiden - shooting game 
 // 25.09.2017
 // By: Martin Andersen | @webmaeistro

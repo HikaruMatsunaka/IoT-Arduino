@@ -1,4 +1,3 @@
-//ペアプログラミングで行いました。(1DS20117P三橋俊平1DS20102R松中光)
 
 #include <M5StickCPlus.h>
 #include <WiFi.h>
